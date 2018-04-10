@@ -38,8 +38,8 @@ echo "address 192.168.3.55" >> /etc/network/interfaces
 echo "netmask 255.255.255.0" >> /etc/network/interfaces
 # echo "network 192.168.3.1" >> /etc/network/interfaces
 echo "gateway 192.168.3.0" >> /etc/network/interfaces
-echo "nameserver 8.8.8.8" > /etc/resolvconf.conf.d/base
-echo "nameserver 8.8.4.4" >> /etc/resolvconf.conf.d/base
+echo "dns-nameserver 8.8.8.8" >> /etc/network/interfaces
+
 #clean
 apt-get clean
 apt-get autoremove
