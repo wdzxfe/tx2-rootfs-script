@@ -9,9 +9,6 @@ apt-get -y install sudo \
 	ssh \
 	upstart \
 	net-tools \
-	ethtool \
-	ifupdown \
-	network-manager \
 	iputils-ping --no-install-recommends
 
 #add root passwd, add user ubuntu and nvidia
@@ -43,9 +40,11 @@ echo "auto eth0" > /etc/network/interfaces
 echo "iface eth0 inet static" >> /etc/network/interfaces
 echo "address 192.168.3.55" >> /etc/network/interfaces
 echo "netmask 255.255.255.0" >> /etc/network/interfaces
-# echo "network 192.168.3.1" >> /etc/network/interfaces
 echo "gateway 192.168.3.1" >> /etc/network/interfaces
-echo "dns-nameservers 8.8.8.8 8.8.4.4" >> /etc/network/interfaces
+# echo "dns-nameservers 8.8.8.8 8.8.4.4 114.114.114.114" >> /etc/network/interfaces
+echo "nameserver 8.8.8.8" > /etc/resolv.conf
+echo "nameserver 8.8.4.4" >> /etc/resolv.conf
+echo "nameserver 114.114.114.114" >> /etc/resolv.conf
 
 # Install Gstreamer-1.0 on the platform with the following commands:
 apt-get -y install gstreamer1.0-tools gstreamer1.0-alsa \

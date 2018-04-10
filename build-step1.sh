@@ -2,7 +2,7 @@
 apt-get -y install qemu-user-static debootstrap
 mkdir ../rootfs
 export ARCH=arm64
-PACKAGE=vi
+PACKAGE=nano
 RELEASE=xenial
 
 debootstrap \
@@ -15,12 +15,15 @@ debootstrap \
         $RELEASE \
         ../rootfs \
 	http://mirrors.ustc.edu.cn/ubuntu-ports/
+
 cp /usr/bin/qemu-aarch64-static ../rootfs/usr/bin
 cp ./build-step2.sh ../rootfs/
+
 cd ../rootfs
 chroot . /bin/bash -c "/debootstrap/debootstrap --second-stage" 
 # Open a QEMU shell to make any additional modifications. You can use apt-get at this point.
 chroot . /bin/bash
+
 rm ./build-step2.sh
 rm ./usr/bin/qemu-aarch64-static
 # When done create a filesystem archive
