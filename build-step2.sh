@@ -1,11 +1,18 @@
 #!/bin/bash
 
 #add apt source for arm
-echo "deb http://mirrors.ustc.edu.cn/ubuntu-ports/ xenial main multiverse restricted universe" >> /etc/apt/sources.list
+echo "deb http://mirrors.ustc.edu.cn/ubuntu-ports/ xenial main multiverse restricted universe" > /etc/apt/sources.list
 apt-get update
 
-#install some base software
-apt-get -y install sudo ssh net-tools iputils-ping --no-install-recommends
+#install some base softwares
+apt-get -y install sudo \
+	ssh \
+	upstart \
+	net-tools \
+	ethtool \
+	ifupdown \
+	network-manager \
+	iputils-ping --no-install-recommends
 
 #add root passwd, add user ubuntu and nvidia
 echo -e "\n" | adduser ubuntu --disabled-login
@@ -39,6 +46,17 @@ echo "netmask 255.255.255.0" >> /etc/network/interfaces
 # echo "network 192.168.3.1" >> /etc/network/interfaces
 echo "gateway 192.168.3.1" >> /etc/network/interfaces
 echo "dns-nameservers 8.8.8.8 8.8.4.4" >> /etc/network/interfaces
+
+# Install Gstreamer-1.0 on the platform with the following commands:
+apt-get -y install gstreamer1.0-tools gstreamer1.0-alsa \
+ gstreamer1.0-plugins-base gstreamer1.0-plugins-good \
+ gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly \
+ gstreamer1.0-libav --no-install-recommends
+apt-get -y install libgstreamer1.0-dev \
+ libgstreamer-plugins-base1.0-dev \
+ libgstreamer-plugins-good1.0-dev \
+ libgstreamer-plugins-bad1.0-dev --no-install-recommends
+gst-inspect-1.0 --version
 
 #clean
 apt-get clean

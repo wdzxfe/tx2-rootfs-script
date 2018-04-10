@@ -2,7 +2,7 @@
 apt-get -y install qemu-user-static debootstrap
 mkdir ../rootfs
 export ARCH=arm64
-PACKAGE=vim
+PACKAGE=vi
 RELEASE=xenial
 
 debootstrap \
@@ -13,7 +13,8 @@ debootstrap \
         --variant=minbase \
         --include=$PACKAGE \
         $RELEASE \
-        ../rootfs
+        ../rootfs \
+	http://mirrors.ustc.edu.cn/ubuntu-ports/
 cp /usr/bin/qemu-aarch64-static ../rootfs/usr/bin
 cp ./build-step2.sh ../rootfs/
 cd ../rootfs
