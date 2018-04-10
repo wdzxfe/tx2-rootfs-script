@@ -8,18 +8,23 @@ apt-get update
 apt-get -y install sudo ssh net-tools iputils-ping --no-install-recommends
 
 #add root passwd, add user ubuntu and nvidia
+echo -e "\n" | adduser ubuntu --disabled-login
+echo -e "\n" | adduser nvidia --disabled-login
+echo -e "\n"
 echo "***************************************************"
 echo "   passwd root, please enter the passwd for root   "
 echo "***************************************************"
 passwd root
+echo -e "\n"
 echo "***************************************************"
-echo "      adduser ubuntu, please enter the passwd      "
+echo " passwd ubuntu, please enter the passwd for ubuntu "
 echo "***************************************************"
-adduser ubuntu
+passwd ubuntu
+echo -e "\n"
 echo "***************************************************"
-echo "      adduser nvidia, please enter the passwd      "
+echo " passwd nvidia, please enter the passwd for nvidia "
 echo "***************************************************"
-adduser nvidia
+passwd nvidia
 
 #set hostname & hosts
 echo "tegra-ubuntu" > /etc/hostname
