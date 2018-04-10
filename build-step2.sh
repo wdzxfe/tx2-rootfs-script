@@ -32,7 +32,14 @@ echo "127.0.0.1 localhost" >> /etc/hosts
 echo "127.0.1.1 tegra-ubuntu" >> etc/hosts
 
 #network config
-
+echo "auto eth0" > /etc/network/interfaces
+echo "iface eth0 inet static" >> /etc/network/interfaces
+echo "address 192.168.3.55" >> /etc/network/interfaces
+echo "netmask 255.255.255.0" >> /etc/network/interfaces
+# echo "network 192.168.3.1" >> /etc/network/interfaces
+echo "gateway 192.168.3.0" >> /etc/network/interfaces
+echo "nameserver 8.8.8.8" > /etc/resolvconf.conf.d/base
+echo "nameserver 8.8.4.4" >> /etc/resolvconf.conf.d/base
 #clean
 apt-get clean
 apt-get autoremove
