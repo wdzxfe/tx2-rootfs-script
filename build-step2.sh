@@ -43,3 +43,6 @@ echo "dns-nameservers 8.8.8.8 8.8.4.4" >> /etc/network/interfaces
 #clean
 apt-get clean
 apt-get autoremove
+#del the cache file created by apt-get update
+rm -f var/cache/apt/pkgcache.bin
+rm -f var/cache/apt/srcpkgcache.bin
