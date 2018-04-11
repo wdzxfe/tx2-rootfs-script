@@ -19,7 +19,7 @@ echo " passwd nvidia, please enter the passwd for nvidia "
 echo "***************************************************"
 passwd nvidia
 
-#add ubuntu and nvidia to sduo group, which can exec sudo -S
+#add ubuntu and nvidia to sduo group, which can exec sudo -S xxx
 usermod -a -G sudo ubuntu
 usermod -a -G sudo nvidia
 
@@ -27,14 +27,23 @@ usermod -a -G sudo nvidia
 echo "deb http://mirrors.ustc.edu.cn/ubuntu-ports/ xenial main multiverse universe" > /etc/apt/sources.list
 apt-get update
 
-#install some base softwares
+#install some basic softwares
 apt-get -y --no-install-recommends install \
 	sudo \
 	ssh \
 	upstart \
 	net-tools \
-	iputils-ping \
 	busybox-static
+
+#add more tools supplied by busybox
+applets=$(/bin/busybox --list)
+
+for i in $applets; do
+    if ! which $i > /dev/null; then
+	ln -sf /bin/busybox /bin/$i
+    fi
+done
+
 :<<!
 #set temp hostname & hosts to run some cmds
 echo $(uname -n) > /etc/hostname
@@ -51,22 +60,6 @@ echo "nameserver 8.8.8.8" > /etc/resolv.conf
 echo "nameserver 8.8.4.4" >> /etc/resolv.conf
 echo "nameserver 114.114.114.114" >> /etc/resolv.conf
 
-#busybox
-applets=$(/bin/busybox --list)
-
-extra_apps=
-for i in $applets; do
-    if ! which $i > /dev/null; then
-        extra_apps="$extra_apps /bin/$i "
-    fi
-done
-
-for i in $extra_apps; do
-    if ! test -f $i; then
-        sudo ln -sf /bin/busybox $i
-    fi
-done
-
 :<<!
 # Install Gstreamer-1.0 on the platform with the following commands:
 apt-get -y install gstreamer1.0-tools gstreamer1.0-alsa \
@@ -80,7 +73,7 @@ apt-get -y install libgstreamer1.0-dev \
 gst-inspect-1.0 --version
 !
 
-#set final hostname & hosts same as nv
+#set the final hostname & hosts same as nvidia setting
 echo "tegra-ubuntu" > /etc/hostname
 echo "127.0.0.1 localhost" > /etc/hosts
 echo "127.0.1.1 tegra-ubuntu" >> etc/hosts
