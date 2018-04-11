@@ -60,6 +60,13 @@ gst-inspect-1.0 --version
 #clean
 apt-get clean
 apt-get autoremove
+rm -rf /usr/share/locale/*
+rm -rf /usr/share/man/*
+rm -rf /usr/share/doc/*
+rm -rf /var/log/*
+rm -rf /var/lib/apt/lists/*
+rm -rf /var/cache/*
+rm -rf /etc/rc*
 #del the cache file created by apt-get update
 rm -f var/cache/apt/pkgcache.bin
 rm -f var/cache/apt/srcpkgcache.bin
