@@ -19,6 +19,10 @@ echo " passwd nvidia, please enter the passwd for nvidia "
 echo "***************************************************"
 passwd nvidia
 
+#add ubuntu and nvidia to sduo group, which can exec sudo -S
+usermod -a -G sudo ubuntu
+usermod -a -G sudo nvidia
+
 #add apt source for arm
 echo "deb http://mirrors.ustc.edu.cn/ubuntu-ports/ xenial main multiverse universe" > /etc/apt/sources.list
 apt-get update
@@ -45,7 +49,7 @@ echo "gateway 192.168.3.1" >> /etc/network/interfaces
 echo "nameserver 8.8.8.8" > /etc/resolv.conf
 echo "nameserver 8.8.4.4" >> /etc/resolv.conf
 echo "nameserver 114.114.114.114" >> /etc/resolv.conf
-
+:<<!
 # Install Gstreamer-1.0 on the platform with the following commands:
 apt-get -y install gstreamer1.0-tools gstreamer1.0-alsa \
  gstreamer1.0-plugins-base gstreamer1.0-plugins-good \
@@ -56,7 +60,7 @@ apt-get -y install libgstreamer1.0-dev \
  libgstreamer-plugins-good1.0-dev \
  libgstreamer-plugins-bad1.0-dev --no-install-recommends
 gst-inspect-1.0 --version
-
+!
 #clean
 apt-get clean
 apt-get autoremove
