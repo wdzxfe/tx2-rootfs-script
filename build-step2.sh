@@ -1,16 +1,5 @@
 #!/bin/bash
 
-#add apt source for arm
-echo "deb http://mirrors.ustc.edu.cn/ubuntu-ports/ xenial main multiverse restricted universe" > /etc/apt/sources.list
-apt-get update
-
-#install some base softwares
-apt-get -y install sudo \
-	ssh \
-	upstart \
-	net-tools \
-	iputils-ping --no-install-recommends
-
 #add root passwd, add user ubuntu and nvidia
 echo -e "\n" | adduser ubuntu --disabled-login
 echo -e "\n" | adduser nvidia --disabled-login
@@ -29,6 +18,17 @@ echo "***************************************************"
 echo " passwd nvidia, please enter the passwd for nvidia "
 echo "***************************************************"
 passwd nvidia
+
+#add apt source for arm
+echo "deb http://mirrors.ustc.edu.cn/ubuntu-ports/ xenial main multiverse universe" > /etc/apt/sources.list
+apt-get update
+
+#install some base softwares
+apt-get -y install sudo \
+	ssh \
+	upstart \
+	net-tools \
+	iputils-ping --no-install-recommends
 
 #set hostname & hosts
 echo "tegra-ubuntu" > /etc/hostname
