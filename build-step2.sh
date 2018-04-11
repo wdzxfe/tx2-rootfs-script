@@ -59,7 +59,6 @@ echo "gateway 192.168.3.1" >> /etc/network/interfaces
 echo "nameserver 8.8.8.8" > /etc/resolv.conf
 echo "nameserver 8.8.4.4" >> /etc/resolv.conf
 echo "nameserver 114.114.114.114" >> /etc/resolv.conf
-
 :<<!
 # Install Gstreamer-1.0 on the platform with the following commands:
 apt-get -y install gstreamer1.0-tools gstreamer1.0-alsa \
@@ -70,9 +69,9 @@ apt-get -y install libgstreamer1.0-dev \
  libgstreamer-plugins-base1.0-dev \
  libgstreamer-plugins-good1.0-dev \
  libgstreamer-plugins-bad1.0-dev --no-install-recommends
+ln -s /dev/null /dev/raw1394
 gst-inspect-1.0 --version
 !
-
 #set the final hostname & hosts same as nvidia setting
 echo "tegra-ubuntu" > /etc/hostname
 echo "127.0.0.1 localhost" > /etc/hosts
