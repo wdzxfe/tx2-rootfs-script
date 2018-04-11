@@ -2,7 +2,6 @@
 apt-get -y install qemu-user-static debootstrap
 mkdir ../rootfs
 export ARCH=arm64
-PACKAGE=nano
 RELEASE=xenial
 
 debootstrap \
@@ -11,7 +10,6 @@ debootstrap \
         --verbose \
         --foreign \
         --variant=minbase \
-        --include=$PACKAGE \
         $RELEASE \
         ../rootfs \
 	http://mirrors.ustc.edu.cn/ubuntu-ports/
