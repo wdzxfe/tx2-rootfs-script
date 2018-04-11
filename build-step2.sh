@@ -28,27 +28,45 @@ echo "deb http://mirrors.ustc.edu.cn/ubuntu-ports/ xenial main multiverse univer
 apt-get update
 
 #install some base softwares
-apt-get -y install sudo \
+apt-get -y --no-install-recommends install \
+	sudo \
 	ssh \
 	upstart \
 	net-tools \
-	iputils-ping --no-install-recommends
-
-#set hostname & hosts
-echo "tegra-ubuntu" > /etc/hostname
-echo "127.0.0.1 localhost" >> /etc/hosts
-echo "127.0.1.1 tegra-ubuntu" >> etc/hosts
-
+	iputils-ping \
+	busybox-static
+:<<!
+#set temp hostname & hosts to run some cmds
+echo $(uname -n) > /etc/hostname
+echo 127.0.0.1 localhost $(uname -n) > /etc/hosts
+!
 #network config
 echo "auto eth0" > /etc/network/interfaces
 echo "iface eth0 inet static" >> /etc/network/interfaces
 echo "address 192.168.3.55" >> /etc/network/interfaces
 echo "netmask 255.255.255.0" >> /etc/network/interfaces
 echo "gateway 192.168.3.1" >> /etc/network/interfaces
-# echo "dns-nameservers 8.8.8.8 8.8.4.4 114.114.114.114" >> /etc/network/interfaces
+#set DNS
 echo "nameserver 8.8.8.8" > /etc/resolv.conf
 echo "nameserver 8.8.4.4" >> /etc/resolv.conf
 echo "nameserver 114.114.114.114" >> /etc/resolv.conf
+
+#busybox
+applets=$(/bin/busybox --list)
+
+extra_apps=
+for i in $applets; do
+    if ! which $i > /dev/null; then
+        extra_apps="$extra_apps /bin/$i "
+    fi
+done
+
+for i in $extra_apps; do
+    if ! test -f $i; then
+        sudo ln -sf /bin/busybox $i
+    fi
+done
+
 :<<!
 # Install Gstreamer-1.0 on the platform with the following commands:
 apt-get -y install gstreamer1.0-tools gstreamer1.0-alsa \
@@ -61,6 +79,12 @@ apt-get -y install libgstreamer1.0-dev \
  libgstreamer-plugins-bad1.0-dev --no-install-recommends
 gst-inspect-1.0 --version
 !
+
+#set final hostname & hosts same as nv
+echo "tegra-ubuntu" > /etc/hostname
+echo "127.0.0.1 localhost" > /etc/hosts
+echo "127.0.1.1 tegra-ubuntu" >> etc/hosts
+
 #clean
 apt-get clean
 apt-get autoremove
@@ -71,6 +95,3 @@ rm -rf /var/log/*
 rm -rf /var/lib/apt/lists/*
 rm -rf /var/cache/*
 rm -rf /etc/rc*
-#del the cache file created by apt-get update
-rm -f var/cache/apt/pkgcache.bin
-rm -f var/cache/apt/srcpkgcache.bin
