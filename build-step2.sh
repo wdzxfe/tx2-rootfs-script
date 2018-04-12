@@ -36,8 +36,8 @@ done
 #add ubuntu and nvidia as normal users
 #add ubuntu and nvidia to sduo group, which can exec sudo -S xxx
 #refer to tx2 configuration, add other groups
-useradd ubuntu -m -p $ubuntupasswd -G adm,sudo
-useradd nvidia -m -p $nvidiapasswd -G adm,sudo
+useradd ubuntu -m -p $ubuntupasswd -G adm,dialout,sudo,audio,video
+useradd nvidia -m -p $nvidiapasswd -G adm,dialout,cdrom,floppy,sudo,audio,dip,video
 
 #fix "perl: warning: Setting locale failed." issue
 echo "export LC_ALL=C" >> /root/.bashrc
