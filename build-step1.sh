@@ -19,13 +19,16 @@ cp ./build-step2.sh ../rootfs/
 
 cd ../rootfs
 chroot . /bin/bash -c "/debootstrap/debootstrap --second-stage" 
-# Open a QEMU shell to make any additional modifications. You can use apt-get at this point.
-chroot . /bin/bash
+# continue to install via build-step2.sh
+chroot . /bin/bash -c "/build-step2.sh"
 
 rm ./build-step2.sh
 rm ./usr/bin/qemu-aarch64-static
-# When done create a filesystem archive
-# sudo tar -cvjSf Tegra_Linux_Sample-Root-Filesystem_${RELEASE}_${PACKAGE}_aarch64.tbz2 *
+
 cd -
+
 size=$(du -sh ../rootfs)
-echo "total size of rootfs: ${size%%.*}"
+echo "total size of based rootfs with gstreamer: ${size%%.*}"
+../apply_binaries.sh > /dev/null
+size=$(du -sh ../rootfs)
+echo "total size of based rootfs after apply_binaries: ${size%%.*}"
