@@ -37,6 +37,14 @@ apt-get -y --no-install-recommends install \
 	net-tools \
 	busybox-static
 
+# Install Gstreamer-1.0 on the platform with the following commands:
+apt-get -y install gstreamer1.0-tools gstreamer1.0-alsa \
+ gstreamer1.0-plugins-base gstreamer1.0-plugins-good \
+ gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly \
+ gstreamer1.0-libav --no-install-recommends
+# ln -s /dev/null /dev/raw1394
+gst-inspect-1.0 --version
+
 #add more tools supplied by busybox
 applets=$(/bin/busybox --list)
 
@@ -62,14 +70,6 @@ echo "netmask 255.255.255.0" >> /etc/network/interfaces
 echo "nameserver 8.8.8.8" > /etc/resolv.conf
 echo "nameserver 8.8.4.4" >> /etc/resolv.conf
 
-# Install Gstreamer-1.0 on the platform with the following commands:
-apt-get -y install gstreamer1.0-tools gstreamer1.0-alsa \
- gstreamer1.0-plugins-base gstreamer1.0-plugins-good \
- gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly \
- gstreamer1.0-libav --no-install-recommends
-ln -s /dev/null /dev/raw1394
-gst-inspect-1.0 --version
-
 #set the final hostname & hosts same as nvidia setting
 echo "tegra-ubuntu" > /etc/hostname
 echo "127.0.0.1 localhost" > /etc/hosts
@@ -84,4 +84,3 @@ rm -rf /usr/share/doc/*
 rm -rf /var/log/*
 rm -rf /var/lib/apt/lists/*
 rm -rf /var/cache/*
-rm -rf /etc/rc*
