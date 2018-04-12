@@ -1,24 +1,26 @@
 #!/bin/bash
 
-#read configuration.txt
-rootpasswd=
-ubuntupasswd=
-nvidiapasswd=
+#add ubuntu and nvidia as normal users
+#add ubuntu and nvidia to sduo group, which can exec sudo cmd
+#refer to tx2 configuration, add other groups
+useradd ubuntu -m -s /bin/bash -G adm,dialout,sudo,audio,video
+useradd nvidia -m -s /bin/bash -G adm,dialout,cdrom,floppy,sudo,audio,dip,video
+
+#read configuration.txt and set passwd for root/ubuntu/nvidia
 ipaddress=
 gateway=
-line=
 
 for line in $(cat configuration.txt)
 do
 	if [ ${line%%=*} == "root_passwd" ]
 	then
-		rootpasswd=${line#*=}
+		echo "root:${line#*=}" | chpasswd
 	elif [ ${line%%=*} == "ubuntu_passwd" ]
 	then
-		ubuntupasswd=${line#*=}
+		echo "ubuntu:${line#*=}" | chpasswd
 	elif [ ${line%%=*} == "nvidia_passwd" ]
 	then
-		nvidiapasswd=${line#*=}
+		echo "nvidia:${line#*=}" | chpasswd
 	elif [ ${line%%=*} == "ip_address" ]
 	then
 		ipaddress=${line#*=}
@@ -29,15 +31,6 @@ do
 		echo "Warning, $line is not supported!"
 	fi
 done
-
-#add root passwd as "root"
-(echo "$rootpasswd";sleep 1;echo "$rootpasswd") | passwd root > /dev/null
-
-#add ubuntu and nvidia as normal users
-#add ubuntu and nvidia to sduo group, which can exec sudo -S xxx
-#refer to tx2 configuration, add other groups
-useradd ubuntu -m -p $ubuntupasswd -G adm,dialout,sudo,audio,video
-useradd nvidia -m -p $nvidiapasswd -G adm,dialout,cdrom,floppy,sudo,audio,dip,video
 
 #fix "perl: warning: Setting locale failed." issue
 echo "export LC_ALL=C" >> /root/.bashrc
@@ -73,12 +66,6 @@ for i in $applets; do
     fi
 done
 
-#set temp hostname & hosts to run some cmds for qemu.
-#if need, unmark it.
-:<<!
-echo $(uname -n) > /etc/hostname
-echo 127.0.0.1 localhost $(uname -n) > /etc/hosts
-!
 #network config
 echo "auto eth0" > /etc/network/interfaces
 echo "iface eth0 inet static" >> /etc/network/interfaces
