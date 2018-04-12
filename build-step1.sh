@@ -15,6 +15,7 @@ fi
 
 export ARCH=arm64
 RELEASE=xenial
+LC_ALL=C
 
 debootstrap \
         --arch=$ARCH \
@@ -27,6 +28,7 @@ debootstrap \
 
 cp /usr/bin/qemu-aarch64-static ../rootfs/usr/bin
 cp ./build-step2.sh ../rootfs/
+cp ./configuration.txt ../rootfs/
 
 cd ../rootfs
 chroot . /bin/bash -c "/debootstrap/debootstrap --second-stage" 
@@ -34,12 +36,13 @@ chroot . /bin/bash -c "/debootstrap/debootstrap --second-stage"
 chroot . /bin/bash -c "/build-step2.sh"
 
 rm ./build-step2.sh
+rm ./configuration.txt
 rm ./usr/bin/qemu-aarch64-static
 
 cd -
 
 size=$(du -sh ../rootfs)
-echo "total size of based rootfs with gstreamer: ${size%%.*}"
+echo "total size of rootfs with gstreamer: ${size%%.*}"
 ../apply_binaries.sh > /dev/null
 size=$(du -sh ../rootfs)
-echo "total size of based rootfs after apply_binaries: ${size%%.*}"
+echo "total size of rootfs with apply_binaries: ${size%%.*}"

@@ -1,16 +1,34 @@
 #!/bin/bash
 
-#pls change the default passwd here!
-rootpasswd=root
-ubuntupasswd=ubuntu
-nvidiapasswd=nvidia
-#pls set the static ip address and gateway here!
-ipaddress=192.168.3.55
-gateway=192.168.3.1
+#read configuration.txt
+rootpasswd=
+ubuntupasswd=
+nvidiapasswd=
+ipaddress=
+gateway=
+line=
 
-#fix "perl: warning: Setting locale failed." issue for root
-echo "export LC_ALL=C" >> /root/.bashrc
-source /root/.bashrc
+for line in $(cat configuration.txt)
+do
+	if [ ${line%%=*} == "root_passwd" ]
+	then
+		rootpasswd=${line#*=}
+	elif [ ${line%%=*} == "ubuntu_passwd" ]
+	then
+		ubuntupasswd=${line#*=}
+	elif [ ${line%%=*} == "nvidia_passwd" ]
+	then
+		nvidiapasswd=${line#*=}
+	elif [ ${line%%=*} == "ip_address" ]
+	then
+		ipaddress=${line#*=}
+	elif [ ${line%%=*} == "gateway" ]
+	then
+		gateway=${line#*=}
+	else
+		echo "Warning, $line is not supported!"
+	fi
+done
 
 #add root passwd as "root"
 (echo "$rootpasswd";sleep 1;echo "$rootpasswd") | passwd root > /dev/null
@@ -21,7 +39,8 @@ source /root/.bashrc
 useradd ubuntu -m -p $ubuntupasswd -G adm,sudo
 useradd nvidia -m -p $nvidiapasswd -G adm,sudo
 
-#fix "perl: warning: Setting locale failed." issue for ubuntu & nvidia
+#fix "perl: warning: Setting locale failed." issue
+echo "export LC_ALL=C" >> /root/.bashrc
 echo "export LC_ALL=C" >> /home/ubuntu/.bashrc
 echo "export LC_ALL=C" >> /home/nvidia/.bashrc
 
