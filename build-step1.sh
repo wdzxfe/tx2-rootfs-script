@@ -1,12 +1,23 @@
 #!/bin/bash
-apt-get -y install qemu-user-static debootstrap
-mkdir ../rootfs
+
+if [ ! -e /usr/bin/qemu-aarch64-static ] || [ ! -e /usr/sbin/debootstrap ]
+then
+	apt-get update
+	apt-get -y install qemu-user-static debootstrap
+fi
+
+if [ -e ../rootfs/ ]
+then
+	mv ../rootfs/ ../rootfs_$(date +%Y%m%d%H%M)
+else
+	mkdir ../rootfs
+fi
+
 export ARCH=arm64
 RELEASE=xenial
 
 debootstrap \
         --arch=$ARCH \
-        --keyring=/usr/share/keyrings/ubuntu-archive-keyring.gpg \
         --verbose \
         --foreign \
         --variant=minbase \
