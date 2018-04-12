@@ -1,27 +1,26 @@
 #!/bin/bash
 
-#add root passwd, add user ubuntu and nvidia
-echo -e "\n" | adduser ubuntu --disabled-login
-echo -e "\n" | adduser nvidia --disabled-login
-echo -e "\n"
-echo "***************************************************"
-echo "   passwd root, please enter the passwd for root   "
-echo "***************************************************"
-passwd root
-echo -e "\n"
-echo "***************************************************"
-echo " passwd ubuntu, please enter the passwd for ubuntu "
-echo "***************************************************"
-passwd ubuntu
-echo -e "\n"
-echo "***************************************************"
-echo " passwd nvidia, please enter the passwd for nvidia "
-echo "***************************************************"
-passwd nvidia
+#pls change the default passwd here!
+rootpasswd=root
+ubuntupasswd=ubuntu
+nvidiapasswd=nvidia
 
+#fix "perl: warning: Setting locale failed." issue for root
+echo "export LC_ALL=C" >> /root/.bashrc
+source /root/.bashrc
+
+#add root passwd as "root"
+(echo "$rootpasswd";sleep 1;echo "$rootpasswd") | passwd root > /dev/null
+
+#add ubuntu and nvidia as normal users
 #add ubuntu and nvidia to sduo group, which can exec sudo -S xxx
-usermod -a -G sudo ubuntu
-usermod -a -G sudo nvidia
+#refer to tx2 configuration, add other groups
+useradd ubuntu -m -p $ubuntupasswd -G adm,sudo
+useradd nvidia -m -p $nvidiapasswd -G adm,sudo
+
+#fix "perl: warning: Setting locale failed." issue for ubuntu & nvidia
+echo "export LC_ALL=C" >> /home/ubuntu/.bashrc
+echo "export LC_ALL=C" >> /home/nvidia/.bashrc
 
 #add apt source for arm
 echo "deb http://mirrors.ustc.edu.cn/ubuntu-ports/ xenial main multiverse universe" > /etc/apt/sources.list
@@ -44,8 +43,9 @@ for i in $applets; do
     fi
 done
 
+#set temp hostname & hosts to run some cmds for qemu.
+#if need, unmark it.
 :<<!
-#set temp hostname & hosts to run some cmds
 echo $(uname -n) > /etc/hostname
 echo 127.0.0.1 localhost $(uname -n) > /etc/hosts
 !
@@ -59,8 +59,9 @@ echo "gateway 192.168.3.1" >> /etc/network/interfaces
 echo "nameserver 8.8.8.8" > /etc/resolv.conf
 echo "nameserver 8.8.4.4" >> /etc/resolv.conf
 echo "nameserver 114.114.114.114" >> /etc/resolv.conf
-:<<!
+
 # Install Gstreamer-1.0 on the platform with the following commands:
+:<<!
 apt-get -y install gstreamer1.0-tools gstreamer1.0-alsa \
  gstreamer1.0-plugins-base gstreamer1.0-plugins-good \
  gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly \

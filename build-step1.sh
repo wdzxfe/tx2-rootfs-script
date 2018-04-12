@@ -27,4 +27,7 @@ rm ./usr/bin/qemu-aarch64-static
 # When done create a filesystem archive
 # sudo tar -cvjSf Tegra_Linux_Sample-Root-Filesystem_${RELEASE}_${PACKAGE}_aarch64.tbz2 *
 cd -
+echo "total size of rootfs:"
 du -sh ../rootfs
+echo "size of sub-directory:"
+du -sh ../rootfs/* | sort -nr
