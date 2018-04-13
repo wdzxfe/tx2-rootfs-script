@@ -9,7 +9,7 @@ useradd nvidia -m -s /bin/bash -G adm,dialout,cdrom,floppy,sudo,audio,dip,video
 ipaddress=
 gateway=
 
-for line in $(cat configuration.txt)
+for line in $(cat config.conf)
 do
 	if [ ${line%%=*} == "root_passwd" ]
 	then

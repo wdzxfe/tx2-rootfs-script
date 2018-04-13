@@ -27,7 +27,7 @@ debootstrap \
 
 cp /usr/bin/qemu-aarch64-static ../rootfs/usr/bin
 cp ./build-step2.sh ../rootfs/
-cp ./configuration.txt ../rootfs/
+cp ./config.conf ../rootfs/
 
 cd ../rootfs
 chroot . /bin/bash -c "/debootstrap/debootstrap --second-stage" 
@@ -35,7 +35,7 @@ chroot . /bin/bash -c "/debootstrap/debootstrap --second-stage"
 chroot . /bin/bash -c "/build-step2.sh"
 
 rm ./build-step2.sh
-rm ./configuration.txt
+rm ./config.conf
 rm ./usr/bin/qemu-aarch64-static
 
 cd -
