@@ -13,15 +13,12 @@ else
 	mkdir ../rootfs
 fi
 
-export ARCH=arm64
-RELEASE=xenial
-
 debootstrap \
-        --arch=$ARCH \
+        --arch=arm64 \
         --verbose \
         --foreign \
         --variant=minbase \
-        $RELEASE \
+        xenial \
         ../rootfs \
 	http://mirrors.ustc.edu.cn/ubuntu-ports/
 
