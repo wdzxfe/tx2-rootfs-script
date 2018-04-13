@@ -62,6 +62,7 @@ for i in $applets; do
 	ln -sf /bin/busybox /bin/$i
     fi
 done
+rm /bin/[[
 
 #network config
 echo "auto eth0" > /etc/network/interfaces
