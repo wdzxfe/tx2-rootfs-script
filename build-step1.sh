@@ -15,7 +15,6 @@ fi
 
 export ARCH=arm64
 RELEASE=xenial
-LC_ALL=C
 
 debootstrap \
         --arch=$ARCH \

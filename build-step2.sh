@@ -34,7 +34,7 @@ done
 #locale setting
 locale-gen en_US.UTF-8
 
-#add apt source for arm
+#change apt source for arm64
 echo "deb http://mirrors.ustc.edu.cn/ubuntu-ports/ xenial main multiverse universe" > /etc/apt/sources.list
 apt-get update
 
@@ -51,7 +51,7 @@ apt-get -y --no-install-recommends install \
  gstreamer1.0-tools gstreamer1.0-alsa \
  gstreamer1.0-plugins-base gstreamer1.0-plugins-good \
  gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly \
- gstreamer1.0-libav 
+ gstreamer1.0-libav
 gst-inspect-1.0 --version
 
 #add more tools supplied by busybox
@@ -79,7 +79,7 @@ echo "127.0.0.1 localhost" > /etc/hosts
 echo "127.0.1.1 tegra-ubuntu" >> etc/hosts
 
 #set rc.local as auto-startup with boot
-echo "[Install]" >> /lib/systemd/system/rc-local.service 
+echo "[Install]" >> /lib/systemd/system/rc-local.service
 echo "WantedBy=multi-user.target" >> /lib/systemd/system/rc-local.service
 ln -fs /lib/systemd/system/rc-local.service /etc/systemd/system/rc-local.service
 chmod +x /etc/rc.local
