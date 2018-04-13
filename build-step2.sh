@@ -1,7 +1,6 @@
 #!/bin/bash
 
 #add ubuntu and nvidia as normal users
-#add ubuntu and nvidia to sduo group, which can exec sudo cmd
 #refer to tx2 configuration, add other groups
 useradd ubuntu -m -s /bin/bash -G adm,dialout,sudo,audio,video
 useradd nvidia -m -s /bin/bash -G adm,dialout,cdrom,floppy,sudo,audio,dip,video
@@ -32,10 +31,8 @@ do
 	fi
 done
 
-#fix "perl: warning: Setting locale failed." issue
-echo "export LC_ALL=C" >> /root/.bashrc
-echo "export LC_ALL=C" >> /home/ubuntu/.bashrc
-echo "export LC_ALL=C" >> /home/nvidia/.bashrc
+#locale setting
+locale-gen en_US.UTF-8
 
 #add apt source for arm
 echo "deb http://mirrors.ustc.edu.cn/ubuntu-ports/ xenial main multiverse universe" > /etc/apt/sources.list
@@ -50,11 +47,11 @@ apt-get -y --no-install-recommends install \
 	busybox-static
 
 # Install Gstreamer-1.0 on the platform with the following commands:
-apt-get -y install gstreamer1.0-tools gstreamer1.0-alsa \
+apt-get -y --no-install-recommends install \
+ gstreamer1.0-tools gstreamer1.0-alsa \
  gstreamer1.0-plugins-base gstreamer1.0-plugins-good \
  gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly \
- gstreamer1.0-libav --no-install-recommends
-# ln -s /dev/null /dev/raw1394
+ gstreamer1.0-libav 
 gst-inspect-1.0 --version
 
 #add more tools supplied by busybox
@@ -80,6 +77,12 @@ echo "nameserver 8.8.4.4" >> /etc/resolv.conf
 echo "tegra-ubuntu" > /etc/hostname
 echo "127.0.0.1 localhost" > /etc/hosts
 echo "127.0.1.1 tegra-ubuntu" >> etc/hosts
+
+#set rc.local as auto-startup with boot
+echo "[Install]" >> /lib/systemd/system/rc-local.service 
+echo "WantedBy=multi-user.target" >> /lib/systemd/system/rc-local.service
+ln -fs /lib/systemd/system/rc-local.service /etc/systemd/system/rc-local.service
+chmod +x /etc/rc.local
 
 #clean
 apt-get clean
