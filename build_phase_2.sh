@@ -46,6 +46,10 @@ apt-get -y --no-install-recommends install \
 	net-tools \
 	busybox-static
 
+# Install numpy
+apt-get -y --no-install-recommends install \
+ python python-dev libatlas-base-dev gcc python-numpy
+
 # Install Gstreamer-1.0 on the platform with the following commands:
 apt-get -y --no-install-recommends install \
  gstreamer1.0-tools gstreamer1.0-alsa \
